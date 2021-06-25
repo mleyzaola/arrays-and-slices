@@ -1,85 +1,73 @@
 package main
 
+import (
+	"fmt"
+	"sort"
+	"time"
+)
+
 type Person struct {
 	Name     string
-	LastName *string
+	Birthday time.Time
 }
 
 func (p *Person) String() string {
-	if p.LastName == nil {
-		return p.Name
-	}
-	return p.Name + " " + *p.LastName
+	return "[" +
+		p.Birthday.Format("03-02-2006") +
+		"] " +
+		p.Name
 }
 
-var personValues = []Person{
-	{
-		Name:     "Susan",
-		LastName: StrToPtr("Smith"),
-	},
-}
-
-var personRefs = []*Person{
+var persons = []Person{
 	{
 		Name:     "Rebeca",
-		LastName: StrToPtr("Zan"),
+		Birthday: time.Date(1995, 8, 16, 0, 0, 0, 0, time.UTC),
+	},
+	{
+		Name:     "Mark",
+		Birthday: time.Date(1968, 9, 15, 0, 0, 0, 0, time.UTC),
+	},
+	{
+		Name:     "Tony",
+		Birthday: time.Date(2002, 3, 21, 0, 0, 0, 0, time.UTC),
+	},
+	{
+		Name:     "Susan",
+		Birthday: time.Date(1999, 12, 5, 0, 0, 0, 0, time.UTC),
 	},
 }
 
 func main() {
+	// sorting primitive integers and strings is straightforward
+	var numbers = []int{3, 23, 1, 19, 12}
+	sort.Ints(numbers)
+	fmt.Println(numbers)
 
-	// slices and pointers
+	var words = []string{"the", "fox", "and", "the", "grapes"}
+	sort.Strings(words)
+	fmt.Println(words)
 
-	// pass a value to slice of values
-	//SliceByValue(personValues)
-	//fmt.Println(personValues[0].String())
-
-	// pass a value to slice of refs
-	//SliceByValueOfPointers(personRefs)
-	//fmt.Println(personRefs[0].String())
-
-	//SliceLoopValues(personRefs)
-	//fmt.Println(personRefs[0].String())
-
-	// pass a slice by ref but with value on its contents
-	//SliceLoopPtrReferenceSlice(&personValues)
-	//fmt.Println(personValues[0].String())
-
-	//SliceLoopPtrReferenceSlice2(&personValues)
-	//for i, v := range personValues {
-	//	fmt.Println(i, ":", v.String())
-	//}
-}
-
-func StrToPtr(v string) *string {
-	return &v
-}
-
-func SliceByValue(persons []Person) {
-	susan := persons[0]
-	susan.LastName = StrToPtr("I won't change")
-}
-
-func SliceByValueOfPointers(persons []*Person) {
-	rebeca := persons[0]
-	rebeca.LastName = StrToPtr("Changed!")
-}
-
-func SliceLoopValues(persons []*Person) {
-	for _, v := range persons {
-		v.Name = "Changed!"
-	}
-}
-
-func SliceLoopPtrReferenceSlice(persons *[]Person) {
-	for _, v := range *persons {
-		v.Name = "I won't change"
-	}
-}
-
-func SliceLoopPtrReferenceSlice2(persons *[]Person) {
-	*persons = append(*persons, Person{
-		Name:     "New",
-		LastName: StrToPtr("Person"),
+	// sorting structs requires more work
+	// another way is using the sort.Slice() function
+	PrintPersons(persons)
+	fmt.Println()
+	sort.Slice(persons, func(i, j int) bool {
+		return persons[i].Birthday.Before(persons[j].Birthday)
 	})
+	PrintPersons(persons)
+
+	// one way of sorting slices is implementing the sort.Sort interface
+	// this requires to implement a custom type as well
+	//var sortedPersons = SortedPerson(persons)
+	//sort.Sort(sortedPersons)
 }
+
+func PrintPersons(persons []Person) {
+	for _, v := range persons {
+		fmt.Println(v.String())
+	}
+}
+
+// SortedPerson is a custom type for implementing sort on Person slice
+// TODO Exercise: implement sort.Sort interface
+//type SortedPerson []Person
