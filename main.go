@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 type Person struct {
 	Name     string
 	LastName *string
@@ -47,10 +45,10 @@ func main() {
 	//SliceLoopPtrReferenceSlice(&personValues)
 	//fmt.Println(personValues[0].String())
 
-	SliceLoopPtrReferenceSlice2(&personValues)
-	for i, v := range personValues {
-		fmt.Println(i, ":", v.String())
-	}
+	//SliceLoopPtrReferenceSlice2(&personValues)
+	//for i, v := range personValues {
+	//	fmt.Println(i, ":", v.String())
+	//}
 }
 
 func StrToPtr(v string) *string {
