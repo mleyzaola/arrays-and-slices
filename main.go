@@ -1,85 +1,39 @@
 package main
 
-type Person struct {
-	Name     string
-	LastName *string
-}
-
-func (p *Person) String() string {
-	if p.LastName == nil {
-		return p.Name
-	}
-	return p.Name + " " + *p.LastName
-}
-
-var personValues = []Person{
-	{
-		Name:     "Susan",
-		LastName: StrToPtr("Smith"),
-	},
-}
-
-var personRefs = []*Person{
-	{
-		Name:     "Rebeca",
-		LastName: StrToPtr("Zan"),
-	},
-}
+import "fmt"
 
 func main() {
 
-	// slices and pointers
+	// maps
 
-	// pass a value to slice of values
-	//SliceByValue(personValues)
-	//fmt.Println(personValues[0].String())
+	// declare a map uninitialized
+	var kv map[string]int
 
-	// pass a value to slice of refs
-	//SliceByValueOfPointers(personRefs)
-	//fmt.Println(personRefs[0].String())
+	// initialize the map
+	kv = make(map[string]int)
 
-	//SliceLoopValues(personRefs)
-	//fmt.Println(personRefs[0].String())
+	// assign values to the map
+	kv["one"] = 1
+	kv["two"] = 2
 
-	// pass a slice by ref but with value on its contents
-	//SliceLoopPtrReferenceSlice(&personValues)
-	//fmt.Println(personValues[0].String())
-
-	//SliceLoopPtrReferenceSlice2(&personValues)
-	//for i, v := range personValues {
-	//	fmt.Println(i, ":", v.String())
-	//}
-}
-
-func StrToPtr(v string) *string {
-	return &v
-}
-
-func SliceByValue(persons []Person) {
-	susan := persons[0]
-	susan.LastName = StrToPtr("I won't change")
-}
-
-func SliceByValueOfPointers(persons []*Person) {
-	rebeca := persons[0]
-	rebeca.LastName = StrToPtr("Changed!")
-}
-
-func SliceLoopValues(persons []*Person) {
-	for _, v := range persons {
-		v.Name = "Changed!"
+	// safe check if value exist
+	if v, ok := kv["one"]; ok {
+		fmt.Println("i exist: ", v)
 	}
-}
 
-func SliceLoopPtrReferenceSlice(persons *[]Person) {
-	for _, v := range *persons {
-		v.Name = "I won't change"
+	// bad practice, can lead to unexpected results
+	v := kv["three"]
+	fmt.Println("because we are using a primitive type, we get its zero value", v)
+
+	// maps can be also initialized on declaration
+	var anotherMap = map[string]int{
+		"one": 1,
 	}
+	fmt.Println("anotherMap content: ", anotherMap)
 }
 
-func SliceLoopPtrReferenceSlice2(persons *[]Person) {
-	*persons = append(*persons, Person{
-		Name:     "New",
-		LastName: StrToPtr("Person"),
-	})
+// SimpleDupCheckFunc will return true if there are duplicated items in `values`
+// complete the function using a map
+func SimpleDupCheckFunc(values []string) bool {
+	return false
 }
