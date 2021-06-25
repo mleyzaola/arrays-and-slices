@@ -58,8 +58,8 @@ func main() {
 
 	// one way of sorting slices is implementing the sort.Sort interface
 	// this requires to implement a custom type as well
-	//var sortedPersons = SortedPerson(persons)
-	//sort.Sort(sortedPersons)
+	var sortedPersons = SortedPerson(persons)
+	sort.Sort(sortedPersons)
 }
 
 func PrintPersons(persons []Person) {
@@ -70,4 +70,12 @@ func PrintPersons(persons []Person) {
 
 // SortedPerson is a custom type for implementing sort on Person slice
 // TODO Exercise: implement sort.Sort interface
-//type SortedPerson []Person
+type SortedPerson []Person
+
+func (s SortedPerson) Len() int { return len(s) }
+func (s SortedPerson) Less(i, j int) bool {
+	return s[i].Birthday.Before(s[j].Birthday)
+}
+func (s SortedPerson) Swap(i, j int) {
+	s[i], s[j] = s[j], s[i]
+}
