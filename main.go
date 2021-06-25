@@ -35,5 +35,12 @@ func main() {
 // SimpleDupCheckFunc will return true if there are duplicated items in `values`
 // complete the function using a map
 func SimpleDupCheckFunc(values []string) bool {
+	kmap := make(map[string]struct{})
+	for _, v := range values {
+		if _, ok := kmap[v]; ok {
+			return true
+		}
+		kmap[v] = struct{}{}
+	}
 	return false
 }
